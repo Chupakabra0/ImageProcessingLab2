@@ -153,7 +153,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ImageHistogram\ImageHistogram.cpp" />
     <ClCompile Include="src\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\HistogramVisualizer\HistogramVisualizer.hpp" />
+    <ClInclude Include="src\ImageHistogram\ImageHistogram.hpp" />
+    <ClInclude Include="include\argparse\argparse.hpp" />
+    <ClInclude Include="include\MainHeader.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
