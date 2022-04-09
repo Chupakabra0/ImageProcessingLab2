@@ -22,10 +22,9 @@ public:
         cv::normalize(*temp, *normalizedHist, 0, histogramImage->rows, cv::NORM_MINMAX, -1, cv::Mat());
 
         for (auto i = 0; i < temp->rows; ++i) {
-            cv::rectangle(*histogramImage, cv::Rect(2 * i, histogramImage->rows - normalizedHist->at<double>(i), 2, normalizedHist->at<double>(i)), cv::Scalar(0, 0, 255));
+            cv::rectangle(*histogramImage, cv::Rect(2 * i, histogramImage->rows - normalizedHist->at<double>(i, 0), 2, normalizedHist->at<double>(i, 0)), cv::Scalar(0, 0, 255));
         }
 
-        cv::namedWindow("Histogram", cv::WINDOW_AUTOSIZE);
         cv::imshow("Histogram", *histogramImage);
     }
 

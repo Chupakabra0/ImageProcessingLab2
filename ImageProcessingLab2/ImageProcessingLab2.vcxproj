@@ -153,10 +153,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\HistogramModifier\LogHistogramModifier.cpp" />
     <ClCompile Include="src\ImageHistogram\ImageHistogram.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\HistogramModifier\HistogramModifier.hpp" />
+    <ClInclude Include="src\HistogramModifier\LogHistogramModifier.hpp" />
     <ClInclude Include="src\HistogramVisualizer\HistogramVisualizer.hpp" />
     <ClInclude Include="src\ImageHistogram\ImageHistogram.hpp" />
     <ClInclude Include="include\argparse\argparse.hpp" />
