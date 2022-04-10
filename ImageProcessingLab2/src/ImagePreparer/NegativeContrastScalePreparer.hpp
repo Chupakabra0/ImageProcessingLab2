@@ -32,6 +32,6 @@ private:
             *std::max_element(this->image->begin<uchar>(), this->image->end<uchar>())
         );*/
 
-        return (f - this->minF) * (this->high - this->low) / (this->maxF - this->minF);
+        return 255 - (f - this->minF) * (this->high - this->low) / (this->maxF - this->minF) + this->minF;
     }
 };

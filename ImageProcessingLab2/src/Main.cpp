@@ -60,7 +60,7 @@ int main(const int argc, char** argv) {
             cv::imwrite(std::format("mod_{}", filePath), *image);
         }
 
-        std::unique_ptr<ImagePreparer> preparer = std::make_unique<NegativeContrastScalePreparer>(image, 100, 200);
+        std::unique_ptr<ImagePreparer> preparer = std::make_unique<NegativeContrastScalePreparer>(image, 0, 255);
         image = preparer->Prepare();
 
         hist->SetImage(image);
