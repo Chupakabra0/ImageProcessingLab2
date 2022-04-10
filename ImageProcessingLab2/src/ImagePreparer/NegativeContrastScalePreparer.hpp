@@ -7,7 +7,7 @@ public:
     explicit NegativeContrastScalePreparer(const std::shared_ptr<cv::Mat>& image, int low = 0, int high = 255)
         : ImagePreparer(image), low(low), high(high),
           preparatorF([this](int f) {
-              return f < this->low ? 1 : (f > this->high ? 0 : this->PrepareHelper(f));
+              return f < this->low ? 255 : (f > this->high ? 0 : this->PrepareHelper(f));
           }) {
         this->minF = *std::min_element(this->image->begin<uchar>(), this->image->end<uchar>());
         this->maxF = *std::max_element(this->image->begin<uchar>(), this->image->end<uchar>());

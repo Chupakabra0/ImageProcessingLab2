@@ -11,7 +11,9 @@ std::unique_ptr<argparse::ArgumentParser> InitMain(const int argc, char** argv) 
     parser->add_argument("-f", "--filepath")
         .required().help("specify the input image file"); 
     parser->add_argument("-l", "--logarithm")
-        .default_value(1).scan<'i', int>().help("SAMPLE LOG TEXT");
+        .nargs(1).scan<'i', int>().help("SAMPLE LOG TEXT");
+    parser->add_argument("-p", "--prepare")
+        .nargs(2).scan<'i', int>().help("SAMPLE PREP TEXT");
 
     try {
         parser->parse_args(argc, argv);
@@ -57,22 +59,27 @@ int main(const int argc, char** argv) {
             cv::imshow("After", *image);
             cv::waitKey(0);
 
-            cv::imwrite(std::format("mod_{}", filePath), *image);
+            cv::imwrite(std::format("log_{}", filePath), *image);
         }
 
-        std::unique_ptr<ImagePreparer> preparer = std::make_unique<NegativeContrastScalePreparer>(image, 0, 255);
-        image = preparer->Prepare();
+        // PREP MOD
+        if (parser->is_used("-p")) {
+            const auto args = parser->get<std::vector<int>>("-p");
 
-        hist->SetImage(image);
-        visualizer = std::make_unique<HistogramVisualizer>(hist);
+            std::unique_ptr<ImagePreparer> preparer = std::make_unique<NegativeContrastScalePreparer>(image, args.at(0), args.at(1));
+            image = preparer->Prepare();
 
-        visualizer->PlotHistogram();
-        cv::waitKey(0);
+            hist->SetImage(image);
+            visualizer = std::make_unique<HistogramVisualizer>(hist);
 
-        cv::imshow("After", *image);
-        cv::waitKey(0);
+            visualizer->PlotHistogram();
+            cv::waitKey(0);
 
-        cv::imwrite(std::format("mod_{}", filePath), *image);
+            cv::imshow("After", *image);
+            cv::waitKey(0);
+
+            cv::imwrite(std::format("prep_{}", filePath), *image);
+        }
 
         return EXIT_SUCCESS;
     }
