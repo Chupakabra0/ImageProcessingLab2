@@ -2,6 +2,7 @@
 
 #include "HistogramVisualizer/HistogramVisualizer.hpp"
 #include "HistogramModifier/LogHistogramModifier.hpp"
+#include "ImagePreparer/NegativeContrastScalePreparer.hpp"
 
 std::unique_ptr<argparse::ArgumentParser> InitMain(const int argc, char** argv) {
     cv::utils::logging::setLogLevel(cv::utils::logging::LogLevel::LOG_LEVEL_SILENT);
@@ -58,6 +59,20 @@ int main(const int argc, char** argv) {
 
             cv::imwrite(std::format("mod_{}", filePath), *image);
         }
+
+        std::unique_ptr<ImagePreparer> preparer = std::make_unique<NegativeContrastScalePreparer>(image, 100, 200);
+        image = preparer->Prepare();
+
+        hist->SetImage(image);
+        visualizer = std::make_unique<HistogramVisualizer>(hist);
+
+        visualizer->PlotHistogram();
+        cv::waitKey(0);
+
+        cv::imshow("After", *image);
+        cv::waitKey(0);
+
+        cv::imwrite(std::format("mod_{}", filePath), *image);
 
         return EXIT_SUCCESS;
     }
