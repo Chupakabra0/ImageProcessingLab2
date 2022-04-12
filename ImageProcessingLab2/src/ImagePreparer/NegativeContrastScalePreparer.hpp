@@ -31,7 +31,8 @@ private:
             *std::min_element(this->image->begin<uchar>(), this->image->end<uchar>()) ,
             *std::max_element(this->image->begin<uchar>(), this->image->end<uchar>())
         );*/
-
-        return 255 - (f - this->minF) * (this->high - this->low) / (this->maxF - this->minF) + this->minF;
+        double temp = f;
+        auto result = static_cast<int>(255.0 - (temp - this->low) * (this->maxF - this->minF) / (this->high - this->low) + this->minF);
+        return result;
     }
 };
