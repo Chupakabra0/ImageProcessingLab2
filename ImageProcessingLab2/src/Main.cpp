@@ -18,8 +18,8 @@ std::unique_ptr<argparse::ArgumentParser> InitMain(const int argc, char** argv) 
     try {
         parser->parse_args(argc, argv);
     }
-    catch (const std::exception& err) {
-        throw err;
+    catch (const std::exception&) {
+        throw;
     }
 
     return parser;
@@ -30,7 +30,6 @@ int main(const int argc, char** argv) {
         auto parser   = InitMain(argc, argv);
         auto filePath = parser->get<std::string>("-f");
         auto image = std::make_shared<cv::Mat>(cv::imread(filePath, cv::ImreadModes::IMREAD_GRAYSCALE));
-        //std::clog << std::format("Open Size: {} x {}\n", image->rows, image->cols);
 
         // HISTOGRAM WORK
 
@@ -48,18 +47,18 @@ int main(const int argc, char** argv) {
             const auto c = parser->get<int>("-l");
 
             std::unique_ptr<HistogramModifier> modifier = std::make_unique<LogHistogramModifier>(image, c); // TODO: var for const 25
-            image = modifier->Modify();
+            const auto modImage = modifier->Modify();
 
-            hist->SetImage(image);
+            hist->SetImage(modImage);
             visualizer = std::make_unique<HistogramVisualizer>(hist);
 
             visualizer->PlotHistogram();
             cv::waitKey(0);
 
-            cv::imshow("After", *image);
+            cv::imshow("After", *modImage);
             cv::waitKey(0);
 
-            cv::imwrite(std::format("log_{}", filePath), *image);
+            cv::imwrite(std::format("log_{}_{}", c, filePath), *modImage);
         }
 
         // PREP MOD
@@ -67,18 +66,18 @@ int main(const int argc, char** argv) {
             const auto args = parser->get<std::vector<int>>("-p");
 
             std::unique_ptr<ImagePreparer> preparer = std::make_unique<NegativeContrastScalePreparer>(image, args.at(0), args.at(1));
-            image = preparer->Prepare();
+            const auto modImage = preparer->Prepare();
 
-            hist->SetImage(image);
+            hist->SetImage(modImage);
             visualizer = std::make_unique<HistogramVisualizer>(hist);
 
             visualizer->PlotHistogram();
             cv::waitKey(0);
 
-            cv::imshow("After", *image);
+            cv::imshow("After", *modImage);
             cv::waitKey(0);
 
-            cv::imwrite(std::format("prep_{}", filePath), *image);
+            cv::imwrite(std::format("prep_{}_{}_{}", args.at(0), args.at(1), filePath), *modImage);
 
             //auto testMatrix = std::make_shared<cv::Mat>(256, 1, CV_8U, 0);
             //for (auto i = 0; i < testMatrix->rows; ++i) {
